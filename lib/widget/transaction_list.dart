@@ -16,27 +16,29 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Column(
-            children: [
-              const Text(
-                "No Transaction Found",
-                style: TextStyle(
-                  fontFamily: "OpenSans",
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
+        ? LayoutBuilder(builder: (context, constrains) {
+            return Column(
+              children: [
+                const Text(
+                  "No Transaction Found",
+                  style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              SizedBox(
-                height: 200,
-                child: Image.asset(
-                  "assets/images/waiting.png",
+                const SizedBox(
+                  height: 10.0,
                 ),
-              ),
-            ],
-          )
+                SizedBox(
+                  height: constrains.maxHeight * 0.6,
+                  child: Image.asset(
+                    "assets/images/waiting.png",
+                  ),
+                ),
+              ],
+            );
+          })
         : ListView.builder(
             itemBuilder: (context, index) => Card(
               elevation: 5,
@@ -68,16 +70,32 @@ class TransactionList extends StatelessWidget {
                     transactions[index].date,
                   ),
                 ),
-                trailing: IconButton(
-                  icon: const Icon(
-                    Icons.delete_rounded,
-                    color: Colors.red,
-                    size: 35,
-                  ),
-                  onPressed: () => _deleteTransaction(
-                    transactions[index].id,
-                  ),
-                ),
+                trailing: MediaQuery.of(context).size.width > 460
+                    ? TextButton.icon(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          _deleteTransaction(
+                            transactions[index].id,
+                          );
+                        },
+                        label: const Text(
+                          "Delete",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : IconButton(
+                        icon: const Icon(
+                          Icons.delete_rounded,
+                          color: Colors.red,
+                          size: 35,
+                        ),
+                        onPressed: () => _deleteTransaction(
+                          transactions[index].id,
+                        ),
+                      ),
               ),
             ),
             itemCount: transactions.length,
