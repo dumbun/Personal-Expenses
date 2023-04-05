@@ -1,8 +1,16 @@
 # personal_expenses
 
-A new Flutter project.
+It is a simple and a usefull app which allow us to see how much we are spending per day.
 
-## Getting Started
+# Day-1
+
+started with basic app and added a data entery logic
+
+# Day-2
+
+added some UI changes for IOS and Andriod (Material3)
+
+https://user-images.githubusercontent.com/113350510/230222897-945d1279-0b08-4212-8aef-d64d85949320.mp4
 
 This project is a starting point for a Flutter application.
 
