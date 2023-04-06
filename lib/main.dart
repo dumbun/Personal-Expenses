@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_expenses/widget/chart.dart';
 import './widget/new_transaction.dart';
@@ -88,11 +87,53 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _showChart = false;
 
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final bool isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final PreferredSizeWidget appBar = AppBar(
+  List<Widget> _buidLandscapeContent(mediaQuery, appBar, txListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Show Chart"),
+          Switch.adaptive(
+            value: _showChart,
+            onChanged: (bool value) {
+              setState(() {
+                _showChart = value;
+              });
+            },
+          ),
+        ],
+      ),
+      _showChart
+          ? SizedBox(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.7,
+              child: Chart(
+                recentTransacions: _recentTransactions,
+              ),
+            )
+          : txListWidget
+    ];
+  }
+
+  List<Widget> _buidPortraitContent(mediaQuery, appBar, txListWidget) {
+    return [
+      SizedBox(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(
+          recentTransacions: _recentTransactions,
+        ),
+      ),
+      txListWidget
+    ];
+  }
+
+  PreferredSizeWidget _buidAppBar() {
+    return AppBar(
       title: const Text(
         "Personal Expenses",
         style: TextStyle(fontFamily: "OpenSans", color: Colors.black),
@@ -109,7 +150,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final bool isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final PreferredSizeWidget appBar = _buidAppBar();
     final txListWidget = SizedBox(
       height: (mediaQuery.size.height -
               appBar.preferredSize.height -
@@ -123,43 +170,9 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Show Chart"),
-                  Switch.adaptive(
-                    value: _showChart,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _showChart = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
+              ..._buidLandscapeContent(mediaQuery, appBar, txListWidget),
             if (!isLandscape)
-              SizedBox(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(
-                  recentTransacions: _recentTransactions,
-                ),
-              ),
-            if (!isLandscape) txListWidget,
-            if (isLandscape)
-              _showChart
-                  ? SizedBox(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(
-                        recentTransacions: _recentTransactions,
-                      ),
-                    )
-                  : txListWidget
+              ..._buidPortraitContent(mediaQuery, appBar, txListWidget),
           ],
         ),
       ),
