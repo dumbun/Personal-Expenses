@@ -47,7 +47,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _userTransactions = [];
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -86,6 +86,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   bool _showChart = false;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   List<Widget> _buidLandscapeContent(mediaQuery, appBar, txListWidget) {
     return [
@@ -144,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _startAddNewTransaction(context);
           },
           icon: const Icon(
-            Icons.add_circle_sharp,
+            Icons.add_rounded,
             size: 40,
           ),
         ),
