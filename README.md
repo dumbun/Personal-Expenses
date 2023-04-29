@@ -1,5 +1,8 @@
 # personal_expenses
 
+https://user-images.githubusercontent.com/113350510/235297032-06109659-8ec1-45ba-988b-3fd95efade6f.webm
+
+
 It is a simple and a usefull app which allow us to see how much we are spending per day.
 
 # Day-1
